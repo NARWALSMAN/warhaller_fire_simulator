@@ -1,5 +1,6 @@
 #import
 import random
+import annex_func
 #import
 
 ############################### action_tir_1_arme sous fonction ##############################################
@@ -125,7 +126,7 @@ def action_tir_1_arme (ct,f,pa,e,svg):
 	
 	return nbpv
 
-def action_tir (nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur):
+def action_tir (nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur,reste):
 	"""
 	simulation de tire pour une unité entière 
 	entree:
@@ -142,7 +143,6 @@ def action_tir (nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur):
 	"""
 
 	nbtouche_reussite = 0
-	reste = 0
 	terminer = False
 
 	for i in range(nb_tireur):
@@ -154,6 +154,32 @@ def action_tir (nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur):
 		if nb_defenseur == 0 or nbtouche_reussite < nb_pv_def:
 			terminer = True
 	if nbtouche_reussite > 0:
-		reste = nbtouche_reussite
+		reste = reste + nbtouche_reussite
+
+	#test de reste
+	if nb_defenseur > 0:
+		test = True
+		while test:
+			if reste > nb_pv_def:
+				nb_defenseur = nb_defenseur-1
+				reste = reste - nb_pv_def
+			
+			if reste < nb_pv_def or nb_defenseur < 1:
+				test = False
 
 	return nb_defenseur,reste
+
+def test_de_tire_fonc ():
+	"""
+	cette fonction fait le test de tire du logiciel
+	entrée:
+		rien
+	sortie:
+		rien
+	"""
+	reste=0
+	nb_unit,e,svg,nb_pv_def,nb_defenseur = recup_defensseur()
+	for i in range(nb_unit):
+		nb_tireur,ct,f,pa=recup_attaquant(i)
+		nb_defenseur,reste=action_tir(nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur,reste)
+	resultat_du_test(nb_defenseur,reste)
