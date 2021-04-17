@@ -13,14 +13,14 @@ def lancer_de_touche(ct_touche,nbtire_touche):
 	sortie:
 		nbtouche_tir: int -> nombre de touche infliger au finale
 	"""
-	nbtouche_tir = 0
+	nbtouche_tir_res = 0
 	
 	for i in range(nbtire_touche):
 		dice = random.randint(1,6)
 		if dice >= ct_touche:
-			nbtouche_tir = nbtouche_tir + 1
+			nbtouche_tir_res = nbtouche_tir_res + 1
 
-	return nbtouche_tir
+	return nbtouche_tir_res
 
 	############################### lancer_de_blessure #####################################################
 def tab_endurance_force(e_tab,f_tab):
@@ -63,7 +63,7 @@ def lancer_de_blessure(nbtouche_blessure,f_blessure,e_blessure):
 
 	for i in range(nbtouche_blessure):
 		dice = random.randint(1,6)
-		if dice >= tab_endurance_force(e,f):
+		if dice >= tab_endurance_force(e_blessure,f_blessure):
 			nbblessure_blessure = nbblessure_blessure + 1
 
 	return nbblessure_blessure
@@ -107,10 +107,12 @@ def lancer_de_sauvgarde(nbblessure_svg,pa_svg,svg_svg):
 	return nbpv_svg
 ############################### action_tir_1_arme sous fonction ##############################################
 
-def action_tir_1_arme (ct,f,pa,e,svg):
+def action_tir_1_arme (nb_de_tire,nb_tireur,ct,f,pa,e,svg):
 	"""
 	fonction qui simule le tir d'une arme sur une unité ennemies
 	entrée:
+		nb_de_tire -> nombre de tir par arme
+		nb_tireur -> nombre de tireur
 		ct: int -> valeur de tire 
 		f: int -> force de l'arme
 		pa: int -> penetration d'armure
@@ -119,17 +121,18 @@ def action_tir_1_arme (ct,f,pa,e,svg):
 	sortie:
 		nbpv: int -> nb pv perdu
 	"""
-
+	nbtire=nb_tireur*nb_de_tire
 	nbtouche=lancer_de_touche(ct,nbtire)
 	nbblessure=lancer_de_blessure(nbtouche,f,e)
 	nbpv=lancer_de_sauvgarde(nbblessure,pa,svg)
 	
 	return nbpv
 
-def action_tir (nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur,reste):
+def action_tir (nb_de_tire,nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur,reste):
 	"""
 	simulation de tire pour une unité entière 
 	entree:
+		nb_de_tire: int -> nombre de tire par arme
 		nb_tireur: int -> nombe de figurine qui vont tirer
 		ct: int -> valeur de tire 
 		f: int -> force de l'arme
@@ -146,7 +149,7 @@ def action_tir (nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur,reste):
 	terminer = False
 
 	for i in range(nb_tireur):
-		nbtouche_reussite = nbtouche_reussite + action_tir_1_arme(ct,f,pa,e,svg)
+		nbtouche_reussite = nbtouche_reussite + action_tir_1_arme(nb_de_tire,nb_tireur,ct,f,pa,e,svg)
 	while terminer == False :
 		if nbtouche_reussite >= nb_pv_def:
 			nbtouche_reussite = nbtouche_reussite-nb_pv_def
@@ -178,8 +181,12 @@ def test_de_tire_fonc ():
 		rien
 	"""
 	reste=0
-	nb_unit,e,svg,nb_pv_def,nb_defenseur = recup_defensseur()
+	nb_defenseur=0
+	nb_unit = annex_func.recup_utilitaire()
+	e,svg,nb_pv_def,nb_defenseur = annex_func.recup_defensseur()
+	annex_func.ecrit_defensseur(e,svg,nb_pv_def,nb_defenseur)
 	for i in range(nb_unit):
-		nb_tireur,ct,f,pa=recup_attaquant(i)
-		nb_defenseur,reste=action_tir(nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur,reste)
-	resultat_du_test(nb_defenseur,reste)
+		nb_de_tire,nb_tireur,ct,f,pa=annex_func.recup_attaquant(i)
+		annex_func.ecrit_attaquant(nb_de_tire,nb_tireur,ct,f,pa)
+		nb_defenseur,reste=action_tir(nb_de_tire,nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur,reste)
+	annex_func.resultat_du_test(nb_defenseur,reste)
