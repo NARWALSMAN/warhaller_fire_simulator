@@ -6,6 +6,8 @@ import boutton
 JEU = True
 pygame.init()
 
+
+#jeu 
 while JEU:
 	for event in pygame.event.get():          
             if event.type == pygame.QUIT:
@@ -13,4 +15,4 @@ while JEU:
                 pygame.quit()
                 sys.exit()
 	pygame.display.update()
-
+#jeu
