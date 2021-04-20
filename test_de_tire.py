@@ -190,3 +190,19 @@ def test_de_tire_fonc ():
 		annex_func.ecrit_attaquant(nb_de_tire,nb_tireur,ct,f,pa)
 		nb_defenseur,reste=action_tir(nb_de_tire,nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur,reste)
 	annex_func.resultat_du_test(nb_defenseur,reste)
+
+def test_de_tire_fonc_v2 (e,svg,nb_pv_def,nb_defenseur,nb_de_tire,nb_tireur,ct,f,pa):
+	"""
+	cette fonction fait le test de tire du logiciel
+	cette fonction sert pour la v2 
+	entrée:
+		rien
+	sortie:
+		rien
+	"""
+	reste=0
+	nb_defenseur=0
+	nb_unit = 1 
+	for i in range(nb_unit):
+		nb_defenseur,reste=action_tir(nb_de_tire,nb_tireur,ct,f,pa,e,svg,nb_pv_def,nb_defenseur,reste)
+	return nb_defenseur,reste

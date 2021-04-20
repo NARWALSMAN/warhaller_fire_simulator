@@ -41,7 +41,7 @@ class button():
                         pygame.draw.rect(win, self.couleur, (self.x,self.y,self.width,self.height),0)
 
                 if self.text != '':
-                        font = pygame.font.SysFont('comicsans', 60)
+                        font = pygame.font.SysFont('comicsans', 20)
                         text = font.render(self.text, 1, (0,0,0))
                         win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
